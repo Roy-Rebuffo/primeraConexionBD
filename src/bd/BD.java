@@ -12,6 +12,8 @@ public class BD {
     
     public static void main(String[] args) {
         
+        boolean done = false;
+        
         try {
             String url = "jdbc:mysql://localhost:3307/pruebas";
             String user = "root";
@@ -29,6 +31,22 @@ public class BD {
                         miResultSet.getString("Descripcion") + "\t" + 
                         miResultSet.getFloat("Precio"));
             }
+            
+            try {
+                miStatement.executeUpdate("INSERT INTO Productos "
+                    + "(id,Nombre,Descripcion,Precio) "
+                    + "VALUES (4,'Tornillos','Tornillos Finos',6)");
+                
+            } catch (Exception e) {
+                System.out.println("El objeto ya existe");
+            }
+            //Actualiza el dato
+            miStatement.executeUpdate("UPDATE Productos "
+                        + "SET Precio = Precio * 10 WHERE Nombre = 'Tornillos'");
+            //Borra el dato
+            int filasAfectadas = miStatement.executeUpdate("DELETE FROM Productos WHERE Nombre = 'Tornillos'");
+            
+            System.out.println("Nº de registros eliminados: " + filasAfectadas);
             
         } catch (SQLException ex) {
             Logger.getLogger(BD.class.getName()).log(Level.SEVERE, null, ex);
